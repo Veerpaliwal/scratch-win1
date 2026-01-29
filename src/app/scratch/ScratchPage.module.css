@@ -1,0 +1,56 @@
+/* BACKGROUND ADDED */
+.background {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #b9d143, #ffd200);
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* EXISTING STYLES */
+.container {
+  text-align: center;
+}
+
+.title {
+  color: #511c0c;
+  margin-bottom: 20px;
+}
+
+.scratchCard {
+  width: 320px;
+  height: 220px;
+  margin: auto;
+  position: relative;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+
+.result {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
+
+.result h3 {
+  margin-bottom: 10px;
+}
