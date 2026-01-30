@@ -61,16 +61,16 @@ export default function ScratchClient() {
       canvas.width = width;
       canvas.height = height;
 
-      ctx.fillStyle = "#C0C0C0";
+      ctx.fillStyle = "#C0C0C0"; // scratch cover color
       ctx.fillRect(0, 0, width, height);
     };
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
     return () => window.removeEventListener("resize", resizeCanvas);
-
   }, []);
 
+  // Generate random amount
   useEffect(() => {
     const min = 500;
     const max = 3000;
@@ -92,7 +92,7 @@ export default function ScratchClient() {
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, canvas.width * 0.06, 0, Math.PI * 2); // radius responsive
+    ctx.arc(x, y, canvas.width * 0.1, 0, Math.PI * 2); // bigger scratch radius
     ctx.fill();
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -112,7 +112,7 @@ export default function ScratchClient() {
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Scratch Coupon</h2>
+        <h1 className={styles.title}>Scratch Coupon</h1>
 
         <div className={styles.scratchCard}>
           {!scratched && (
@@ -137,8 +137,10 @@ export default function ScratchClient() {
 
           {scratched && (
             <div className={styles.result}>
-              <h1>{product}</h1>
-              <h2>🎉 You got ₹{amount} off 🎉</h2>
+              <div className={styles.rewardBox}>
+                <h1>{product}</h1>
+                <h1>🎉You got ₹{amount} off🎉</h1>
+              </div>
             </div>
           )}
 

@@ -1,28 +1,60 @@
+/* Background with subtle gradient animation */
 .page {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #282321, #bfc9bd, #484c3d, #d5f59d);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
   padding: 10px;
   box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glassmorphism card */
 .glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 20px;
-  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.3);
   max-width: 400px;
   width: 100%;
+  padding: 30px 25px;
   box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Hover animation for fun effect */
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+
+/* Title with fun shadow */
 .glass-card h2 {
   text-align: center;
-  margin-bottom: 15px;
-  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #ebe8e8;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  animation: bounce 2s infinite;
 }
 
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Form styling */
 .glass-card form {
   display: flex;
   flex-direction: column;
@@ -30,33 +62,64 @@
 
 .glass-card label {
   margin: 10px 0 5px;
+  color: #0f0a0a;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 .glass-card input,
-.glass-card select,
-.glass-card button {
-  padding: 10px;
+.glass-card select {
+  padding: 12px;
   font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.25);
+  color: #565050;
+  outline: none;
+  margin-bottom: 15px;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
+.glass-card input:focus,
+.glass-card select:focus {
+  background: rgba(255,255,255,0.35);
+  transform: scale(1.02);
+  border-color: #fff;
+}
+
+/* Button styling */
 .glass-card button {
-  margin-top: 15px;
-  background-color: #511c0c;
-  color: #fff;
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 1.1rem;
+  border-radius: 15px;
   border: none;
   cursor: pointer;
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.glass-card button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  background: linear-gradient(135deg, #ee0979, #ff6a00);
+}
+
+/* Mobile responsiveness */
 @media (max-width: 480px) {
   .glass-card {
-    padding: 15px;
+    padding: 20px 15px;
+  }
+  .glass-card h2 {
+    font-size: 1.5rem;
   }
   .glass-card input,
   .glass-card select,
   .glass-card button {
-    font-size: 0.9rem;
-    padding: 8px;
+    font-size: 0.95rem;
+    padding: 10px;
   }
 }

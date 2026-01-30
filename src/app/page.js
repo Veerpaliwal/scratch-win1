@@ -20,35 +20,24 @@ export default function Page() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validation rules:
-    // - company must be selected
-    // - fullname: anything allowed
-    // - phoneno: exactly 10 characters (anything)
-    // - aadhar: anything
     if (
       !formData.company ||
       !formData.fullname ||
       formData.phoneno.length !== 10 ||
       !formData.aadhar
     ) {
-      alert(
-        "Fill all details correctly.\nPhone No. must be exactly 10 characters."
-      );
+      alert("🚨 Fill all details correctly!\nPhone No. must be exactly 10 digits.");
       return;
     }
-
-    // Redirect to scratch page with product
     router.push(`/scratch?product=${formData.company}`);
   };
 
   return (
     <div className={styles.page}>
       <div className={styles["glass-card"]}>
-        <h2>Scratch Coupon</h2>
-
+        <h2> Scratch & Win </h2>
         <form onSubmit={handleSubmit}>
-          <label>Product Company</label>
+          <label> Product Company</label>
           <select name="company" onChange={handleChange}>
             <option value="">Select</option>
             <option value="MI">MI</option>
@@ -63,7 +52,7 @@ export default function Page() {
             <option value="HAVELLS">HAVELLS</option>
           </select>
 
-          <label>Full Name</label>
+          <label> Full Name</label>
           <input
             type="text"
             name="fullname"
@@ -71,7 +60,7 @@ export default function Page() {
             onChange={handleChange}
           />
 
-          <label>Phone no.</label>
+          <label> Phone No.</label>
           <input
             type="text"
             name="phoneno"
@@ -80,7 +69,7 @@ export default function Page() {
             onChange={handleChange}
           />
 
-          <label>Aadhar Number</label>
+          <label> Aadhar Number</label>
           <input
             type="text"
             name="aadhar"
@@ -88,7 +77,7 @@ export default function Page() {
             onChange={handleChange}
           />
 
-          <button type="submit">Scratch Now</button>
+          <button type="submit">🎉 Scratch Now!</button>
         </form>
       </div>
     </div>
