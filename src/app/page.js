@@ -1,66 +1,96 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
-export default function Home() {
+export default function Page() {
+  const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    company: "",
+    fullname: "",
+    phoneno: "",
+    aadhar: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validation rules:
+    // - company must be selected
+    // - fullname: anything allowed
+    // - phoneno: exactly 10 characters (anything)
+    // - aadhar: anything
+    if (
+      !formData.company ||
+      !formData.fullname ||
+      formData.phoneno.length !== 10 ||
+      !formData.aadhar
+    ) {
+      alert(
+        "Fill all details correctly.\nPhone No. must be exactly 10 characters."
+      );
+      return;
+    }
+
+    // Redirect to scratch page with product
+    router.push(`/scratch?product=${formData.company}`);
+  };
+
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      <div className={styles["glass-card"]}>
+        <h2>Scratch Coupon</h2>
+
+        <form onSubmit={handleSubmit}>
+          <label>Product Company</label>
+          <select name="company" onChange={handleChange}>
+            <option value="">Select</option>
+            <option value="MI">MI</option>
+            <option value="SAMSUNG">Samsung</option>
+            <option value="LG">LG</option>
+            <option value="IFFALCON">IFFALCON</option>
+            <option value="TCL">TCL</option>
+            <option value="WHIRLPOOL">WHIRLPOOL</option>
+            <option value="VOLTAS">VOLTAS</option>
+            <option value="HAIER">HAIER</option>
+            <option value="BAJAJ">BAJAJ</option>
+            <option value="HAVELLS">HAVELLS</option>
+          </select>
+
+          <label>Full Name</label>
+          <input
+            type="text"
+            name="fullname"
+            placeholder="Enter your name"
+            onChange={handleChange}
+          />
+
+          <label>Phone no.</label>
+          <input
+            type="text"
+            name="phoneno"
+            placeholder="Enter 10 digit phone no."
+            maxLength={10}
+            onChange={handleChange}
+          />
+
+          <label>Aadhar Number</label>
+          <input
+            type="text"
+            name="aadhar"
+            placeholder="Enter aadhar"
+            onChange={handleChange}
+          />
+
+          <button type="submit">Scratch Now</button>
+        </form>
+      </div>
     </div>
   );
 }

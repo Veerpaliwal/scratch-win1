@@ -49,9 +49,17 @@ export default function ScratchPage() {
     oscillator.stop(audioCtx.currentTime + 0.4);
   };
 
-  // 🎨 CANVAS PREPARE
+  // 🎨 CANVAS + AMOUNT SETUP
   useEffect(() => {
-    setAmount(Math.floor(Math.random() * (3000 - 500 + 1)) + 500);
+    // ✅ AMOUNT IN MULTIPLES OF 50
+    const min = 500;
+    const max = 3000;
+    const step = 50;
+
+    const randomAmount =
+      Math.floor(Math.random() * ((max - min) / step + 1)) * step + min;
+
+    setAmount(randomAmount);
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -87,6 +95,7 @@ export default function ScratchPage() {
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let cleared = 0;
+
     for (let i = 0; i < imageData.data.length; i += 4) {
       if (imageData.data[i + 3] === 0) cleared++;
     }
@@ -129,8 +138,8 @@ export default function ScratchPage() {
 
           {scratched && (
             <div className={styles.result}>
-              <h3>{product}</h3>
-              <p>🎉 You got ₹{amount} off 🎉</p>
+              <h1>{product}</h1>
+              <h2>🎉 You got ₹{amount} off 🎉</h2>
             </div>
           )}
 
