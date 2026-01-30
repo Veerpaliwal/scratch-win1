@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Confetti from "react-confetti";
 import styles from "./ScratchPage.module.css";
 
-export default function ScratchPage() {
+export default function ScratchClient() {
   const searchParams = useSearchParams();
   const product = searchParams.get("product") || "PRODUCT";
 
@@ -17,7 +17,6 @@ export default function ScratchPage() {
   const [amount, setAmount] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  // 🔓 UNLOCK SOUND
   const unlockSound = () => {
     if (!audioCtxRef.current) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -25,7 +24,6 @@ export default function ScratchPage() {
     }
   };
 
-  // 🔊 MONEY SOUND
   const playMoneySound = () => {
     const audioCtx = audioCtxRef.current;
     if (!audioCtx) return;
@@ -49,9 +47,7 @@ export default function ScratchPage() {
     oscillator.stop(audioCtx.currentTime + 0.4);
   };
 
-  // 🎨 CANVAS + AMOUNT SETUP
   useEffect(() => {
-    // ✅ AMOUNT IN MULTIPLES OF 50
     const min = 500;
     const max = 3000;
     const step = 50;
@@ -66,16 +62,6 @@ export default function ScratchPage() {
 
     ctx.fillStyle = "#C0C0C0";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#B0B0B0";
-    for (let i = 0; i < 2000; i++) {
-      ctx.fillRect(
-        Math.random() * canvas.width,
-        Math.random() * canvas.height,
-        1,
-        1
-      );
-    }
   }, []);
 
   const scratch = (e) => {
