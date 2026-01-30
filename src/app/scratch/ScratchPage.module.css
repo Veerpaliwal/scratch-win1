@@ -7,6 +7,8 @@
   background: linear-gradient(135deg, #b9d143, #ffd200);
   background-size: 400% 400%;
   animation: gradientMove 10s ease infinite;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 @keyframes gradientMove {
@@ -17,18 +19,22 @@
 
 .container {
   text-align: center;
-  width: 90%;
+  width: 100%;
   max-width: 500px;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .title {
   color: #511c0c;
   margin-bottom: 20px;
+  font-size: 1.5rem;
 }
 
 .scratchCard {
   width: 100%;
-  height: 70vh;
+  height: 50vh;
+  max-height: 400px;
   margin: auto;
   position: relative;
   border-radius: 15px;
@@ -54,15 +60,33 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
-.result img {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  margin-bottom: 10px;
+.result h1 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
 }
 
-.result h3 {
-  margin-bottom: 10px;
+.result h2 {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.2rem;
+  }
+  .scratchCard {
+    height: 45vh;
+    max-height: 350px;
+  }
+  .result h1 {
+    font-size: 1rem;
+  }
+  .result h2 {
+    font-size: 0.9rem;
+  }
 }

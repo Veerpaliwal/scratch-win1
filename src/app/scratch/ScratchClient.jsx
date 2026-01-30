@@ -1,4 +1,3 @@
-// src/app/scratch/ScratchClient.jsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -17,6 +16,7 @@ export default function ScratchClient() {
   const [scratched, setScratched] = useState(false);
   const [amount, setAmount] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
   const unlockSound = () => {
     if (!audioCtxRef.current) {
@@ -48,21 +48,36 @@ export default function ScratchClient() {
     oscillator.stop(audioCtx.currentTime + 0.4);
   };
 
+  // Set responsive canvas size
+  useEffect(() => {
+    const resizeCanvas = () => {
+      const container = canvasRef.current.parentElement;
+      const width = container.offsetWidth;
+      const height = container.offsetHeight;
+      setCanvasSize({ width, height });
+
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.fillStyle = "#C0C0C0";
+      ctx.fillRect(0, 0, width, height);
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    return () => window.removeEventListener("resize", resizeCanvas);
+
+  }, []);
+
   useEffect(() => {
     const min = 500;
     const max = 3000;
     const step = 50;
-
     const randomAmount =
       Math.floor(Math.random() * ((max - min) / step + 1)) * step + min;
-
     setAmount(randomAmount);
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "#C0C0C0";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
 
   const scratch = (e) => {
@@ -77,12 +92,11 @@ export default function ScratchClient() {
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
+    ctx.arc(x, y, canvas.width * 0.06, 0, Math.PI * 2); // radius responsive
     ctx.fill();
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let cleared = 0;
-
     for (let i = 0; i < imageData.data.length; i += 4) {
       if (imageData.data[i + 3] === 0) cleared++;
     }
@@ -104,8 +118,6 @@ export default function ScratchClient() {
           {!scratched && (
             <canvas
               ref={canvasRef}
-              width={320}
-              height={220}
               className={styles.canvas}
               onMouseDown={() => {
                 unlockSound();
@@ -131,7 +143,11 @@ export default function ScratchClient() {
           )}
 
           {showConfetti && (
-            <Confetti width={320} height={220} recycle={false} />
+            <Confetti
+              width={canvasSize.width}
+              height={canvasSize.height}
+              recycle={false}
+            />
           )}
         </div>
       </div>

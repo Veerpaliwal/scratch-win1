@@ -1,53 +1,62 @@
 .page {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url("https://images.unsplash.com/photo-1557683316-973673baf926")
-    no-repeat center/cover;
+  min-height: 100vh;
+  background: #f0f0f0;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .glass-card {
-  width: 460px;
-  padding: 70px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .glass-card h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.glass-card form {
+  display: flex;
+  flex-direction: column;
 }
 
 .glass-card label {
-  font-size: 14px;
-  margin-top: 15px;
-  display: block;
+  margin: 10px 0 5px;
 }
 
 .glass-card input,
-.glass-card select {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid white;
-  color: white;
-  padding: 8px 0;
-  outline: none;
-}
-
-.glass-card option {
-  color: black;
+.glass-card select,
+.glass-card button {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 .glass-card button {
-  width: 100%;
-  margin-top: 25px;
-  padding: 12px;
-  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #511c0c;
+  color: #fff;
   border: none;
   cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 15px;
+  }
+  .glass-card input,
+  .glass-card select,
+  .glass-card button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
 }
