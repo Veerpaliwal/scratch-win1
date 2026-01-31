@@ -15,23 +15,24 @@ export default function HomePage() {
     pincode: "",
   });
 
+  const [submitted, setSubmitted] = useState(false);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Optional: basic validation
     if (!formData.company || !formData.fullname || !formData.phoneno) {
       alert("Please fill Product, Name & Phone number");
       return;
     }
 
-    router.push(`/scratch?product=${encodeURIComponent(formData.company)}`);
+    setSubmitted(true);
+
+    setTimeout(() => {
+      router.push(`/scratch?product=${encodeURIComponent(formData.company)}`);
+    }, 1000);
   };
 
   return (
@@ -44,16 +45,19 @@ export default function HomePage() {
           </p>
 
           <form onSubmit={handleSubmit} className={styles.form}>
+            {/* Product Company */}
             <div className={styles.inputGroup}>
-              <label className={styles.label}>Product Company *</label>
               <select
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
                 className={styles.input}
                 required
+                disabled={submitted}
               >
-                <option value=""></option>
+                <option value="" hidden>
+                  Select Product Company
+                </option>
                 <option value="MI">MI / Xiaomi</option>
                 <option value="SAMSUNG">Samsung</option>
                 <option value="LG">LG</option>
@@ -65,64 +69,73 @@ export default function HomePage() {
                 <option value="BAJAJ">Bajaj</option>
                 <option value="HAVELLS">Havells</option>
               </select>
+              <label className={styles.label}>Product Company</label>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label className={styles.label}>Full Name *</label>
-              <input
-                type="text"
-                name="fullname"
-                placeholder=" "
-                value={formData.fullname}
-                onChange={handleChange}
-                className={styles.input}
-                required
-              />
-            </div>
+            {!submitted && (
+              <>
+                {/* Full Name */}
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    name="fullname"
+                    placeholder="Full Name"
+                    value={formData.fullname}
+                    onChange={handleChange}
+                    className={styles.input}
+                    required
+                  />
+                  <label className={styles.label}>Full Name</label>
+                </div>
 
-            <div className={styles.inputGroup}>
-              <label className={styles.label}>Phone Number *</label>
-              <input
-                type="tel"
-                name="phoneno"
-                placeholder=" "
-                value={formData.phoneno}
-                onChange={handleChange}
-                className={styles.input}
-                pattern="[0-9]{10}"
-                maxLength={10}
-                required
-              />
-            </div>
+                {/* Phone Number */}
+                <div className={styles.inputGroup}>
+                  <input
+                    type="tel"
+                    name="phoneno"
+                    placeholder="Phone Number"
+                    value={formData.phoneno}
+                    onChange={handleChange}
+                    className={styles.input}
+                    pattern="[0-9]{10}"
+                    maxLength={10}
+                    required
+                  />
+                  <label className={styles.label}>Phone Number</label>
+                </div>
 
-            <div className={styles.inputGroup}>
-              <label className={styles.label}>Address</label>
-              <input
-                type="text"
-                name="address"
-                placeholder=" "
-                value={formData.address}
-                onChange={handleChange}
-                className={styles.input}
-              />
-            </div>
+                {/* Address */}
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    name="address"
+                    placeholder="Address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    className={styles.input}
+                  />
+                  <label className={styles.label}>Address</label>
+                </div>
 
-            <div className={styles.inputGroup}>
-              <label className={styles.label}>Pin Code</label>
-              <input
-                type="text"
-                name="pincode"
-                placeholder=" "
-                value={formData.pincode}
-                onChange={handleChange}
-                className={styles.input}
-                pattern="[0-9]{6}"
-                maxLength={6}
-              />
-            </div>
+                {/* Pin Code */}
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    name="pincode"
+                    placeholder="Pin Code"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                    className={styles.input}
+                  />
+                  <label className={styles.label}>Pin Code</label>
+                </div>
+              </>
+            )}
 
-            <button type="submit" className={styles.submitBtn}>
-              🎉 Proceed to Scratch
+            <button type="submit" className={styles.submitBtn} disabled={submitted}>
+              {submitted ? "✅ Details Saved" : "🎉 Proceed to Scratch"}
             </button>
           </form>
         </div>
