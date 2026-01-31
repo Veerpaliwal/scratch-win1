@@ -11,7 +11,8 @@ export default function Page() {
     company: "",
     fullname: "",
     phoneno: "",
-    aadhar: "",
+    address: "",
+    pincode: "",
   });
 
   const handleChange = (e) => {
@@ -63,11 +64,19 @@ export default function Page() {
             onChange={handleChange}
           />
 
-          <label>Aadhar Number</label>
+          <label>Address</label>
           <input
             type="text"
-            name="aadhar"
-            placeholder="Enter aadhar"
+            name="address"
+            placeholder="Enter your address"
+            onChange={handleChange}
+          />
+
+          <label>Pin Code</label>
+          <input
+            type="text"
+            name="pincode"
+            placeholder="Enter pin code"
             onChange={handleChange}
           />
 
