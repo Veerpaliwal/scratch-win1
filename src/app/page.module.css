@@ -6,7 +6,7 @@
   background: linear-gradient(135deg, #282321, #bfc9bd, #484c3d, #d5f59d);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
-  padding: 10px;
+  padding: 0px;
   font-family: "Poppins", sans-serif;
 }
 
@@ -58,7 +58,7 @@
   border: none;
   background: rgba(255,255,255,0.4);
   outline: none;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .glass-card button {

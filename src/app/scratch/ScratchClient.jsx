@@ -5,9 +5,23 @@ import { useSearchParams } from "next/navigation";
 import Confetti from "react-confetti";
 import styles from "./ScratchPage.module.css";
 
+// Product → Logo mapping (add more if needed)
+const productLogos = {
+  MI: "/logos/mi.png",
+  SAMSUNG: "/logos/samsung.png",
+  LG: "/logos/lg.png",
+  IFFALCON: "/logos/iffalcon.png",
+  TCL: "/logos/tcl.png",
+  WHIRLPOOL: "/logos/whirlpool.png",
+  VOLTAS: "/logos/voltas.png",
+  HAIER: "/logos/haier.png",
+  BAJAJ: "/logos/bajaj.png",
+  HAVELLS: "/logos/havells.png",
+};
+
 export default function ScratchClient() {
   const searchParams = useSearchParams();
-  const product = searchParams.get("product") || "PRODUCT";
+  const product = (searchParams.get("product") || "PRODUCT").toUpperCase();
 
   const canvasRef = useRef(null);
   const audioCtxRef = useRef(null);
@@ -18,66 +32,83 @@ export default function ScratchClient() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
+  // Unlock audio on first interaction (mobile fix)
   const unlockSound = () => {
-    if (!audioCtxRef.current) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      audioCtxRef.current = new AudioContext();
-    }
+    if (audioCtxRef.current) return;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioCtxRef.current = new AudioContext();
   };
 
   const playMoneySound = () => {
     const audioCtx = audioCtxRef.current;
     if (!audioCtx) return;
 
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
 
-    oscillator.type = "triangle";
-    oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime);
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.35);
 
-    gainNode.gain.setValueAtTime(0.6, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(
-      0.001,
-      audioCtx.currentTime + 0.4
-    );
+    gain.gain.setValueAtTime(0.7, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
 
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.4);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.5);
   };
 
-  // Set responsive canvas size
+  // Responsive canvas
   useEffect(() => {
-    const resizeCanvas = () => {
-      const container = canvasRef.current.parentElement;
-      const width = container.offsetWidth;
-      const height = container.offsetHeight;
-      setCanvasSize({ width, height });
+    const resize = () => {
+      const parent = canvasRef.current?.parentElement;
+      if (!parent) return;
+
+      const w = parent.offsetWidth;
+      const h = parent.offsetHeight;
+
+      setCanvasSize({ width: w, height: h });
 
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = w;
+      canvas.height = h;
 
-      ctx.fillStyle = "#C0C0C0"; // scratch cover color
-      ctx.fillRect(0, 0, width, height);
+      const ctx = canvas.getContext("2d");
+      // Metallic / shiny scratch layer
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, "#c0c0c0");
+      grad.addColorStop(0.4, "#e8e8e8");
+      grad.addColorStop(0.6, "#a0a0a0");
+      grad.addColorStop(1, "#c0c0c0");
+
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Optional: subtle pattern/noise
+      ctx.globalAlpha = 0.15;
+      ctx.fillStyle = "#000";
+      for (let i = 0; i < 800; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        ctx.fillRect(x, y, 1.5, 1.5);
+      }
+      ctx.globalAlpha = 1;
     };
 
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-    return () => window.removeEventListener("resize", resizeCanvas);
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
-  // Generate random amount
+  // Random discount amount
   useEffect(() => {
     const min = 500;
     const max = 3000;
     const step = 50;
-    const randomAmount =
-      Math.floor(Math.random() * ((max - min) / step + 1)) * step + min;
-    setAmount(randomAmount);
+    const val = Math.floor(Math.random() * ((max - min) / step + 1)) * step + min;
+    setAmount(val);
   }, []);
 
   const scratch = (e) => {
@@ -87,59 +118,66 @@ export default function ScratchClient() {
     const ctx = canvas.getContext("2d");
     const rect = canvas.getBoundingClientRect();
 
-    const x = (e.clientX || e.touches[0].clientX) - rect.left;
-    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    const x = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left;
+    const y = (e.clientY || e.touches?.[0]?.clientY || 0) - rect.top;
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, canvas.width * 0.1, 0, Math.PI * 2); // bigger scratch radius
+    ctx.arc(x, y, canvas.width * 0.12, 0, Math.PI * 2);
     ctx.fill();
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let cleared = 0;
-    for (let i = 0; i < imageData.data.length; i += 4) {
-      if (imageData.data[i + 3] === 0) cleared++;
+    // Check how much scratched
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let transparent = 0;
+    for (let i = 3; i < imgData.data.length; i += 4) {
+      if (imgData.data[i] === 0) transparent++;
     }
 
-    if (cleared > imageData.data.length * 0.5 / 4) {
+    if (transparent > (imgData.data.length / 4) * 0.55) {
       setScratched(true);
       setShowConfetti(true);
       playMoneySound();
-      setTimeout(() => setShowConfetti(false), 3000);
+      setTimeout(() => setShowConfetti(false), 4500);
     }
   };
 
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        <h1 className={styles.title}>Scratch Coupon</h1>
+        <h1 className={styles.title}>Lucky Scratch Coupon</h1>
+        <p className={styles.subtitle}>Scratch to reveal your exclusive discount!</p>
 
         <div className={styles.scratchCard}>
           {!scratched && (
-            <canvas
-              ref={canvasRef}
-              className={styles.canvas}
-              onMouseDown={() => {
-                unlockSound();
-                setIsDrawing(true);
-              }}
-              onMouseUp={() => setIsDrawing(false)}
-              onMouseMove={scratch}
-              onMouseLeave={() => setIsDrawing(false)}
-              onTouchStart={() => {
-                unlockSound();
-                setIsDrawing(true);
-              }}
-              onTouchEnd={() => setIsDrawing(false)}
-              onTouchMove={scratch}
-            />
+            <>
+              <canvas
+                ref={canvasRef}
+                className={styles.canvas}
+                onMouseDown={() => { unlockSound(); setIsDrawing(true); }}
+                onMouseUp={() => setIsDrawing(false)}
+                onMouseMove={scratch}
+                onMouseLeave={() => setIsDrawing(false)}
+                onTouchStart={() => { unlockSound(); setIsDrawing(true); }}
+                onTouchEnd={() => setIsDrawing(false)}
+                onTouchMove={scratch}
+              />
+              <div className={styles.instruction}>Scratch here → ✨</div>
+            </>
           )}
 
           {scratched && (
             <div className={styles.result}>
               <div className={styles.rewardBox}>
-                <h1>{product}</h1>
-                <h1>🎉You got ₹{amount} off🎉</h1>
+                {productLogos[product] && (
+                  <img
+                    src={productLogos[product]}
+                    alt={`${product} logo`}
+                    className={styles.productLogo}
+                  />
+                )}
+
+                <h2 className={styles.prizeText}>₹{amount} OFF</h2>
+                <p className={styles.prizeSub}>on your next {product} purchase!</p>
               </div>
             </div>
           )}
@@ -149,6 +187,8 @@ export default function ScratchClient() {
               width={canvasSize.width}
               height={canvasSize.height}
               recycle={false}
+              numberOfPieces={180}
+              gravity={0.15}
             />
           )}
         </div>
