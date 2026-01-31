@@ -15,29 +15,24 @@ export default function Page() {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !formData.company ||
-      !formData.fullname ||
-      formData.phoneno.length !== 10 ||
-      !formData.aadhar
-    ) {
-      alert("🚨 Fill all details correctly!\nPhone No. must be exactly 10 digits.");
-      return;
-    }
     router.push(`/scratch?product=${formData.company}`);
   };
 
   return (
     <div className={styles.page}>
       <div className={styles["glass-card"]}>
-        <h2> Scratch & Win </h2>
+        <h2>Scratch & Win</h2>
+
         <form onSubmit={handleSubmit}>
-          <label> Product Company</label>
+          <label>Product Company</label>
           <select name="company" onChange={handleChange}>
             <option value="">Select</option>
             <option value="MI">MI</option>
@@ -52,7 +47,7 @@ export default function Page() {
             <option value="HAVELLS">HAVELLS</option>
           </select>
 
-          <label> Full Name</label>
+          <label>Full Name</label>
           <input
             type="text"
             name="fullname"
@@ -60,16 +55,15 @@ export default function Page() {
             onChange={handleChange}
           />
 
-          <label> Phone No.</label>
+          <label>Phone No.</label>
           <input
             type="text"
             name="phoneno"
-            placeholder="Enter 10 digit phone no."
-            maxLength={10}
+            placeholder="Enter phone no."
             onChange={handleChange}
           />
 
-          <label> Aadhar Number</label>
+          <label>Aadhar Number</label>
           <input
             type="text"
             name="aadhar"
