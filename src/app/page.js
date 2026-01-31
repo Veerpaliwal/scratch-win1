@@ -18,21 +18,23 @@ export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.company || !formData.fullname || !formData.phoneno) {
-      alert("Please fill Product, Name & Phone number");
-      return;
-    }
 
+    // ❌ NO validation
     setSubmitted(true);
 
     setTimeout(() => {
-      router.push(`/scratch?product=${encodeURIComponent(formData.company)}`);
-    }, 1000);
+      router.push(
+        `/scratch?product=${encodeURIComponent(formData.company)}`
+      );
+    }, 800);
   };
 
   return (
@@ -41,7 +43,7 @@ export default function HomePage() {
         <div className={styles.glassCard}>
           <h1 className={styles.title}>Scratch & Win Exclusive Discount</h1>
           <p className={styles.subtitle}>
-            Fill details → Scratch → Get instant offer on your favourite brand!
+            Fill details → Scratch → Get instant offer
           </p>
 
           <form onSubmit={handleSubmit} className={styles.form}>
@@ -52,12 +54,8 @@ export default function HomePage() {
                 value={formData.company}
                 onChange={handleChange}
                 className={styles.input}
-                required
-                disabled={submitted}
               >
-                <option value="" hidden>
-                  Select Product Company
-                </option>
+                <option value="">Select Product Company</option>
                 <option value="MI">MI / Xiaomi</option>
                 <option value="SAMSUNG">Samsung</option>
                 <option value="LG">LG</option>
@@ -74,7 +72,6 @@ export default function HomePage() {
 
             {!submitted && (
               <>
-                {/* Full Name */}
                 <div className={styles.inputGroup}>
                   <input
                     type="text"
@@ -83,12 +80,10 @@ export default function HomePage() {
                     value={formData.fullname}
                     onChange={handleChange}
                     className={styles.input}
-                    required
                   />
                   <label className={styles.label}>Full Name</label>
                 </div>
 
-                {/* Phone Number */}
                 <div className={styles.inputGroup}>
                   <input
                     type="tel"
@@ -97,14 +92,10 @@ export default function HomePage() {
                     value={formData.phoneno}
                     onChange={handleChange}
                     className={styles.input}
-                    pattern="[0-9]{10}"
-                    maxLength={10}
-                    required
                   />
                   <label className={styles.label}>Phone Number</label>
                 </div>
 
-                {/* Address */}
                 <div className={styles.inputGroup}>
                   <input
                     type="text"
@@ -117,7 +108,6 @@ export default function HomePage() {
                   <label className={styles.label}>Address</label>
                 </div>
 
-                {/* Pin Code */}
                 <div className={styles.inputGroup}>
                   <input
                     type="text"
@@ -125,8 +115,6 @@ export default function HomePage() {
                     placeholder="Pin Code"
                     value={formData.pincode}
                     onChange={handleChange}
-                    pattern="[0-9]{6}"
-                    maxLength={6}
                     className={styles.input}
                   />
                   <label className={styles.label}>Pin Code</label>
@@ -134,8 +122,8 @@ export default function HomePage() {
               </>
             )}
 
-            <button type="submit" className={styles.submitBtn} disabled={submitted}>
-              {submitted ? "✅ Details Saved" : "🎉 Proceed to Scratch"}
+            <button type="submit" className={styles.submitBtn}>
+              {submitted ? "✅ Redirecting..." : "🎉 Proceed to Scratch"}
             </button>
           </form>
         </div>
