@@ -5,6 +5,8 @@
   align-items: center;
   font-family: system-ui, sans-serif;
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  margin: 0;
+  padding: 0;
 }
 
 .container {
