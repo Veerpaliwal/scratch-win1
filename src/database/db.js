@@ -13,7 +13,8 @@ db.prepare(`
     fullname TEXT,
     phoneno TEXT,
     address TEXT,
-    pincode TEXT
+    pincode TEXT,
+    coupon_code TEXT
   )
 `).run();
 

@@ -2,16 +2,23 @@
 
 import { useState } from "react";
 
+/* ✅ Coupon Generator */
+function generateCoupon() {
+  return "SUP" + Math.floor(100000 + Math.random() * 900000);
+}
+
 export default function TestPage() {
   const [customers, setCustomers] = useState([]);
   const [newName, setNewName] = useState("");
 
+  /* LOAD */
   async function loadCustomers() {
     const res = await fetch("/api/customer");
     const data = await res.json();
     setCustomers(data);
   }
 
+  /* ADD */
   async function addCustomer() {
     await fetch("/api/customer", {
       method: "POST",
@@ -22,21 +29,26 @@ export default function TestPage() {
         phoneno: "9876543210",
         address: "Delhi",
         pincode: "110001",
+        coupon_code: generateCoupon(), // ✅ coupon added
       }),
     });
+
     setNewName("");
     loadCustomers();
   }
 
+  /* DELETE */
   async function deleteCustomer(id) {
     await fetch("/api/customer", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
+
     loadCustomers();
   }
 
+  /* UPDATE */
   async function updateCustomer(id) {
     const updatedName = prompt("Enter new name:");
     if (!updatedName) return;
@@ -53,18 +65,24 @@ export default function TestPage() {
         pincode: "110001",
       }),
     });
+
     loadCustomers();
   }
 
   return (
-    <div style={{
-      padding: 30,
-      maxWidth: 500,
-      margin: "0 auto",
-      fontFamily: "Arial, sans-serif",
-    }}>
-      <h2 style={{ textAlign: "center", color: "#333" }}>SQLite3 CRUD Test</h2>
+    <div
+      style={{
+        padding: 30,
+        maxWidth: 520,
+        margin: "0 auto",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <h2 style={{ textAlign: "center", color: "#333" }}>
+        SQLite3 CRUD + Coupon Test
+      </h2>
 
+      {/* INPUT */}
       <div style={{ display: "flex", marginBottom: 20 }}>
         <input
           type="text"
@@ -77,7 +95,7 @@ export default function TestPage() {
             borderRadius: 5,
             border: "1px solid #ccc",
             marginRight: 10,
-            fontSize: 14
+            fontSize: 14,
           }}
         />
         <button
@@ -89,7 +107,7 @@ export default function TestPage() {
             border: "none",
             borderRadius: 5,
             cursor: "pointer",
-            fontSize: 14
+            fontSize: 14,
           }}
         >
           Add
@@ -104,26 +122,33 @@ export default function TestPage() {
             borderRadius: 5,
             cursor: "pointer",
             fontSize: 14,
-            marginLeft: 5
+            marginLeft: 5,
           }}
         >
           Load
         </button>
       </div>
 
+      {/* LIST */}
       <ul style={{ listStyle: "none", padding: 0 }}>
         {customers.map((c) => (
-          <li key={c.id} style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            backgroundColor: "#f5f5f5",
-            padding: 10,
-            borderRadius: 5,
-            marginBottom: 8,
-          }}>
-            <span>{c.fullname} – {c.phoneno}</span>
+          <li
+            key={c.id}
+            style={{
+              backgroundColor: "#f5f5f5",
+              padding: 10,
+              borderRadius: 5,
+              marginBottom: 8,
+            }}
+          >
             <div>
+              <strong>{c.fullname}</strong> – {c.phoneno}
+            </div>
+            <div style={{ fontSize: 13, marginTop: 4 }}>
+              🎟️ <strong>Coupon:</strong> {c.coupon_code || "N/A"}
+            </div>
+
+            <div style={{ marginTop: 8 }}>
               <button
                 onClick={() => updateCustomer(c.id)}
                 style={{
@@ -134,7 +159,7 @@ export default function TestPage() {
                   border: "none",
                   borderRadius: 3,
                   cursor: "pointer",
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               >
                 Update
@@ -148,7 +173,7 @@ export default function TestPage() {
                   border: "none",
                   borderRadius: 3,
                   cursor: "pointer",
-                  fontSize: 12
+                  fontSize: 12,
                 }}
               >
                 Delete
